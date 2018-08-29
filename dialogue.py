@@ -18,7 +18,7 @@ class Dialogue:
 
     def load_data(self, path):
         with open(path, 'r', encoding='utf-8') as file:
-            sentences = [line.stirp() for line in file]
+            sentences = [line.strip() for line in file]
 
         return sentences
 
