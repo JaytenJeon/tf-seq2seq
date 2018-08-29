@@ -1,5 +1,5 @@
 import tensorflow as tf
-from models import Hred
+from models import Seq2Seq
 from dialogue import Dialogue
 
 
@@ -39,7 +39,7 @@ hparams = tf.contrib.training.HParams(total_epochs=1000,
                                       batch_size=100,
                                       total_batch=len(dialogue.seq_data) // 100 + 1)
 
-train_model = Hred(hparams, 'train')
+train_model = Seq2Seq(hparams, 'train')
 print("start")
 train(train_model, hparams)
 
