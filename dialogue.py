@@ -1,26 +1,16 @@
 import re
-import os
-
+import numpy as np
 
 class Dialogue:
-    def __init__(self, path):
-        self.sentences = self.load_data(path)
-        self.seq_data = self.make_seq_data(self.sentences)
-        if not os.path.isfile(path+'.voc'):
-            self.make_voc(path+'.voc')
+    def __init__(self):
+        self.seq_data = np.load('./data/conversation_train.npy')
 
-        self.voc_arr = ['_P_', '_S_', '_E_', '_U_'] + self.load_voc(path + '.voc')
+        self.voc_arr = np.load('./data/conversation_voc.npy')
 
         self.voc_dict = {voc: i for i, voc in enumerate(self.voc_arr)}
         self.voc_size = len(self.voc_arr)
 
         self.index_in_epoch = 0
-
-    def load_data(self, path):
-        with open(path, 'r', encoding='utf-8') as file:
-            sentences = [line.strip() for line in file]
-
-        return sentences
 
     def tokenizer(self, sentence):
         sentence = re.sub("[.,!?\"':;)(]", ' ', sentence)
@@ -38,15 +28,6 @@ class Dialogue:
     def pad(self, tokens, max_len):
         padded = tokens + ['_P_'] * (max_len - len(tokens))
         return padded
-
-    def make_voc(self, path):
-        voc_set = set()
-        for sentence in self.sentences:
-            voc_set.update(self.tokenizer(sentence))
-        voc_arr = list(voc_set)
-        with open(path, 'w', encoding='utf-8') as file:
-            for voc in voc_arr:
-                file.write(voc+'\r')
 
     def load_voc(self, path):
         with open(path, 'r', encoding='utf-8') as file:
@@ -78,7 +59,7 @@ class Dialogue:
         enc_max_len, dec_max_len, max_len = self.max_len(batch_set)
 
         self.index_in_epoch = self.index_in_epoch + batch_size
-        if self.index_in_epoch > len(self.seq_data):
+        if self.index_in_epoch >= len(self.seq_data):
             self.index_in_epoch = 0
 
         for i in range(0, len(batch_set) - 1, 2):

@@ -27,7 +27,7 @@ class Seq2Seq(object):
         self.saver = tf.train.Saver()
 
     def build_graph(self, hparams):
-        _, enc_state = self.build_encoder(hparams)
+        enc_state = self.build_encoder(hparams)
 
         logits, sample_id = self.build_decoder(hparams, enc_state)
 
