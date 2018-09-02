@@ -3,9 +3,9 @@ import numpy as np
 
 class Dialogue:
     def __init__(self):
-        self.seq_data = np.load('./data/conversation_train.npy')
+        self.seq_data = np.load('./data/dict_idx_all_training.npy')
 
-        self.voc_arr = np.load('./data/conversation_voc.npy')
+        self.voc_arr = np.load('./data/words.npy')
 
         self.voc_dict = {voc: i for i, voc in enumerate(self.voc_arr)}
         self.voc_size = len(self.voc_arr)
@@ -18,7 +18,7 @@ class Dialogue:
         return tokens
 
     def tokens_to_ids(self, tokens):
-        ids = [self.voc_dict[token] if token in self.voc_arr else self.voc_dict['_U_'] for token in tokens]
+        ids = [self.voc_dict[token] if token in self.voc_arr else self.voc_dict['U'] for token in tokens]
         return ids
 
     def ids_to_tokens(self, ids):
@@ -26,7 +26,7 @@ class Dialogue:
         return tokens
 
     def pad(self, tokens, max_len):
-        padded = tokens + ['_P_'] * (max_len - len(tokens))
+        padded = tokens + ['P'] * (max_len - len(tokens))
         return padded
 
     def load_voc(self, path):

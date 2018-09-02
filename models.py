@@ -1,11 +1,12 @@
 import tensorflow as tf
+import numpy as np
 
 
 class Seq2Seq(object):
-
     def __init__(self, hparams, mode):
         self.mode = mode
-        self.embeddings = tf.Variable(tf.random_uniform([hparams.voc_size, hparams.embedding_size], -1.0, 1.0))
+        vector = np.load('./data/vectors.npy')
+        self.embeddings = tf.Variable(vector, trainable=False)
 
         self.source = tf.placeholder(tf.int32, shape=[None, None], name='source')
         self.target_input = tf.placeholder(tf.int32, shape=[None, None], name='target_input')
